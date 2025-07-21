@@ -29,11 +29,13 @@ const LoginSignup = () => {
       const response = await axios.post(endpoint, formData, {
         withCredentials: true,
       });
-      if(!response || response.data == "No admin Acc* this email ID"){
-        throw new Error("No admin Acc* this email ID");
+      console.log(response);
+      if (response?.data?.ok) {
+        if (!isAdmin) navigate("/form");
+        if (isAdmin) navigate("/admin/applications");
       }
-      if(!isAdmin)  navigate("/form");
-      if(isAdmin)  navigate("/admin/applications")
+      else alert("Please check your information");
+      throw new Error("Please check you information");
     } catch (err) {
       console.log(err);
     }

@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-const Base_Url = "http://localhost:4000";
 import ApplicationCard from "./ApplicationCard";
+
+const Base_Url = "http://localhost:4000";
 
 const Applications = () => {
   const [data, setData] = useState([]);
+  const [verified, setVerified] = useState(new Set());
 
   const fetchData = async () => {
     try {
@@ -18,9 +20,23 @@ const Applications = () => {
   };
 
   const handleStatus = async (id, status) => {
-    console.log("Accepted ID:", id);
-    console.log(status);
-    // You can implement actual logic here
+    try {
+      const response = await axios.post(
+        `${Base_Url}/applications/${id}/status`,
+        { status },
+        { withCredentials: true }
+      );
+      console.log(response);
+      if (response.data === "Email send") {
+        alert(`${status} Email has been sent  to student`);
+        // Update verified Set
+        setVerified((prev) => new Set([...prev, id]));
+      } else {
+        alert("Please try again later");
+      }
+    } catch (err) {
+      console.log("Status update error:", err);
+    }
   };
 
   useEffect(() => {
@@ -33,13 +49,15 @@ const Applications = () => {
         Pending Applications
       </h1>
       {data.length > 0 ? (
-        data.map((ele) => (
-          <ApplicationCard
-            key={ele._id}
-            data={ele}
-            clickHandler={handleStatus}
-          />
-        ))
+        data
+          .filter((ele) => !verified.has(ele._id)) 
+          .map((ele) => (
+            <ApplicationCard
+              key={ele._id}
+              data={ele}
+              clickHandler={handleStatus}
+            />
+          ))
       ) : (
         <p className="text-center text-gray-600">No pending applications.</p>
       )}
@@ -48,3 +66,4 @@ const Applications = () => {
 };
 
 export default Applications;
+
