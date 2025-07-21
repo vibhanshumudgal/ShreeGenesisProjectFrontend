@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CollegeForm from "./FormPage";
 import ConfirmationPage from "./ConfirmationPage";
 import Applications from "./Applications";
+import VerifyPassword from "./VerifyPassword";
 const App = () => {
   return (
     <Router>
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/form" element={<CollegeForm />} />
           <Route path = "/confirmationPage" element={<ConfirmationPage/>} />
           <Route path = "/admin/applications" element={<Applications/>} />
+          <Route path="/verify-password" element={<VerifyPassword />} />
         </Route>
       </Routes>
     </Router>
