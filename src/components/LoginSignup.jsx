@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const Base_Url = "http://localhost:4000";
+const Base_Url="https://shreegenesisprojectbackend.onrender.com"
 const LoginSignup = () => {
   const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(false);

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+const Base_Url="https://shreegenesisprojectbackend.onrender.com"
 
-const Base_Url = "http://localhost:4000";
 const Navbar = () => {
   const navigate = useNavigate();
 
