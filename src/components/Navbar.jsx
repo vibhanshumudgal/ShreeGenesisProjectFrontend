@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="bg-blue-600 text-white px-6 py-4 shadow-md flex justify-between items-center">
       {/* Left side */}
-      <div className="text-2xl font-bold tracking-wide">lola</div>
+      <div className="text-2xl font-bold tracking-wide">Connect</div>
 
       {/* Right side */}
       <div className="space-x-4 text-sm">
