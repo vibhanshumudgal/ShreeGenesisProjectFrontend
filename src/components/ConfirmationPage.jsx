@@ -12,7 +12,8 @@ const ConfirmationPage = () => {
         </h1>
 
         <p className="text-gray-600 text-lg">
-          Thank you for submitting your application. Our admin team will review your form soon.
+          Thank you for submitting your application. Our admin team will review
+          your form soon.
         </p>
 
         <div className="flex items-center justify-center gap-2 text-blue-600">

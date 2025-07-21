@@ -4,7 +4,7 @@ import LoginSignup from "./LoginSignup";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import CollegeForm from "./FormPage";
-import ConfirmationPage from "./confirmationPage";
+import ConfirmationPage from "./ConfirmationPage";
 import Applications from "./Applications";
 const App = () => {
   return (
