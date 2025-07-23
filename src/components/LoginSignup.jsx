@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Base_Url="https://shreegenesisprojectbackend.onrender.com"
+const Base_Url= import.meta.env.VITE_BASE_URL;
 const LoginSignup = () => {
   const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(false);

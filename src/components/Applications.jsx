@@ -1,8 +1,9 @@
+// Applications.jsx
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ApplicationCard from "./ApplicationCard";
 
-const Base_Url="https://shreegenesisprojectbackend.onrender.com"
+const Base_Url = import.meta.env.VITE_BASE_URL;
 
 const Applications = () => {
   const [data, setData] = useState([]);
@@ -28,8 +29,7 @@ const Applications = () => {
       );
       console.log(response);
       if (response.data === "Email send") {
-        alert(`${status} Email has been sent  to student`);
-        // Update verified Set
+        alert(`${status} Email has been sent to student`);
         setVerified((prev) => new Set([...prev, id]));
       } else {
         alert("Please try again later");
@@ -50,7 +50,7 @@ const Applications = () => {
       </h1>
       {data.length > 0 ? (
         data
-          .filter((ele) => !verified.has(ele._id)) 
+          .filter((ele) => !verified.has(ele._id))
           .map((ele) => (
             <ApplicationCard
               key={ele._id}
@@ -66,4 +66,3 @@ const Applications = () => {
 };
 
 export default Applications;
-

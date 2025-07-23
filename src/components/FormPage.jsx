@@ -1,186 +1,134 @@
+import React, { useState } from "react";
 import axios from "axios";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Base_Url="https://shreegenesisprojectbackend.onrender.com"
 
+const Base_Url= import.meta.env.VITE_BASE_URL;
 const CollegeForm = () => {
-    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    branch: "",
-    father_name: "",
     mother_name: "",
+    father_name: "",
     college_name: "",
+    branch: "",
     phone_number: "",
     address: "",
-    application_password: "",
-    final_password: "",
   });
 
+  const [photo, setPhoto] = useState(null);
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [e.target.name]: e.target.value,
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(`${Base_Url}/submitform`, formData, {
-        withCredentials: true,
-      });
-      if(response.data==="User Form Submit"){
-        navigate("/confirmationPage");
-        alert("Form submited Succesfully")
-      }
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
+  const handlePhotoChange = (e) => {
+    setPhoto(e.target.files[0]);
   };
 
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!photo) {
+    alert("Please upload a photo.");
+    return;
+  }
+
+  // ✅ Proper FormData object
+  const form = new FormData();
+
+  // Append all fields from formData
+  for (const key in formData) {
+    form.append(key, formData[key]);
+  }
+
+  // Append photo file
+  form.append("photo", photo);
+
+  try {
+    console.log("Submitting FormData:", formData);
+
+    const response = await axios.post(`${Base_Url}/submitform`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+
+    if (response.data === "User Form Submitted with Photo") {
+      alert("Form submitted successfully!");
+      navigate("/confirmationPage");
+    } else {
+      alert(response.data);
+    }
+  } catch (err) {
+    console.error("Form submission error:", err);
+    alert("Something went wrong. Try again.");
+  }
+};
+
+
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-8 bg-white shadow-2xl rounded-2xl border border-gray-200">
-      <h2 className="text-3xl font-bold text-center mb-8 text-blue-700">
-        College Admission Form
-      </h2>
+    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-4">College Admission Form</h2>
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+        {[
+          { label: "Name", name: "name" },
+          { label: "Email", name: "email" },
+          { label: "Father's Name", name: "father_name" },
+          { label: "Mother's Name", name: "mother_name" },
+          { label: "College Name", name: "college_name" },
+          { label: "Branch", name: "branch" },
+          { label: "Phone Number", name: "phone_number", type: "number" },
+          { label: "Address", name: "address" },
+        ].map(({ label, name, type = "text" }) => (
+          <div key={name}>
+            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <input
+              type={type}
+              name={name}
+              required
+              value={formData[name]}
+              onChange={handleChange}
+              className="mt-1 block w-full border rounded px-3 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        ))}
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Name
+            Upload Passport Size Photo
           </label>
           <input
-            type="text"
-            name="name"
+            type="file"
+            name="photo"
+            accept="image/*"
             required
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            onChange={handlePhotoChange}
+            className="mt-1 w-full"
           />
         </div>
 
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
+        {photo && (
+          <div className="mt-2">
+            <p className="text-sm text-gray-600">Preview:</p>
+            <img
+              src={URL.createObjectURL(photo)}
+              alt="Preview"
+              className="mt-1 w-32 h-32 object-cover border rounded"
+            />
+          </div>
+        )}
 
-        {/* Branch */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Branch
-          </label>
-          <input
-            type="text"
-            name="branch"
-            required
-            value={formData.branch}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* Father's Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Father's Name
-          </label>
-          <input
-            type="text"
-            name="father_name"
-            required
-            value={formData.father_name}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* Mother's Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Mother's Name
-          </label>
-          <input
-            type="text"
-            name="mother_name"
-            required
-            value={formData.mother_name}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* College Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            College Name
-          </label>
-          <input
-            type="text"
-            name="college_name"
-            required
-            value={formData.college_name}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* Phone Number */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Phone Number
-          </label>
-          <input
-            type="number"
-            name="phone_number"
-            required
-            value={formData.phone_number}
-            onChange={handleChange}
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* Address */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Address
-          </label>
-          <textarea
-            name="address"
-            required
-            value={formData.address}
-            onChange={handleChange}
-            rows="3"
-            className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
-
-        {/* Submit */}
-        <div className="md:col-span-2 text-center mt-4">
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all duration-200"
-          >
-            Submit Application
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Submit Form
+        </button>
       </form>
     </div>
   );

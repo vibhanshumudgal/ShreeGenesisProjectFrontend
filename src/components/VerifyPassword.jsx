@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-const Base_Url="https://shreegenesisprojectbackend.onrender.com"
+const Base_Url= import.meta.env.VITE_BASE_URL;
 const VerifyPassword = () => {
   const [params] = useSearchParams();
   const token = params.get('token');

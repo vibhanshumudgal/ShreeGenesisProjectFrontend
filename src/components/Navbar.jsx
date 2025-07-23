@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-const Base_Url="https://shreegenesisprojectbackend.onrender.com"
-
+const Base_Url= import.meta.env.VITE_BASE_URL;
 const Navbar = () => {
   const navigate = useNavigate();
 
